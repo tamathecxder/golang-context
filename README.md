@@ -1,4 +1,4 @@
-# Learning Golang Context at Programmer Zaman Now
+# Golang Context w/ PZN
 
 Welcome to my GitHub repository dedicated to my journey in learning about Golang context at Programmer Zaman Now. In this repository, you'll find a collection of resources, code samples, and notes from the course.
 
