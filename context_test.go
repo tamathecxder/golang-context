@@ -22,11 +22,33 @@ func CreateCounter(ctx context.Context) chan int {
 			default:
 				destination <- counter
 				counter++
+				time.Sleep(1 * time.Second)
 			}
 		}
 	}()
 
 	return destination
+}
+
+func TestContextWithTimeout(t *testing.T) {
+	parent := context.Background()
+	ctx, cancel := context.WithTimeout(parent, 5*time.Second)
+
+	defer cancel()
+
+	fmt.Println("before, total goroutine:", runtime.NumGoroutine())
+
+	destination := CreateCounter(ctx)
+
+	fmt.Println("process, total goroutine:", runtime.NumGoroutine())
+
+	for n := range destination {
+		fmt.Println("Counter:", n)
+	}
+
+	time.Sleep(3 * time.Second)
+
+	fmt.Println("after, total goroutine:", runtime.NumGoroutine())
 }
 
 func TestContextWithCancel(t *testing.T) {
