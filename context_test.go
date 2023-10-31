@@ -30,6 +30,27 @@ func CreateCounter(ctx context.Context) chan int {
 	return destination
 }
 
+func TestContextWithDeadline(t *testing.T) {
+	parent := context.Background()
+	ctx, cancel := context.WithDeadline(parent, time.Now().Add(10*time.Second))
+
+	defer cancel()
+
+	fmt.Println("before, total goroutine:", runtime.NumGoroutine())
+
+	destination := CreateCounter(ctx)
+
+	fmt.Println("process, total goroutine:", runtime.NumGoroutine())
+
+	for n := range destination {
+		fmt.Println("Counter:", n)
+	}
+
+	time.Sleep(3 * time.Second)
+
+	fmt.Println("after, total goroutine:", runtime.NumGoroutine())
+}
+
 func TestContextWithTimeout(t *testing.T) {
 	parent := context.Background()
 	ctx, cancel := context.WithTimeout(parent, 5*time.Second)
